@@ -1,5 +1,5 @@
 from flask import Flask,request,redirect,render_template,session
-import db.py
+import db
 
 app=Flask(__name__)
 

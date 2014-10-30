@@ -1,0 +1,10 @@
+from flask import Flask,request,redirect,render_template,session
+
+app=Flask(__name__)
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method=='GET':
+        pass
+    else request.method=='POST':
+        pass
