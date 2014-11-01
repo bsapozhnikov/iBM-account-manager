@@ -1,7 +1,8 @@
-from flask import Flask,request,redirect,render_template,session
+from flask import Flask,request,redirect,render_template,session,flash
 import db
 
 app=Flask(__name__)
+app.secret_key ='insert_clever_secret_here'
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -10,7 +11,17 @@ def login():
     else:
         user=request.form['user']
         pw=request.form['pass']
-
+        if db.validateUser(user,pw):
+            session['user']=user
+            if 'return_to' in session:
+                s = session['return_to']
+                session.pop('return_to',None)
+                return redirect(s)
+            else: return redirect('/home')
+        else:
+            flash('Please enter a valid username and password')
+            return render_template('login.html')
+            
 @app.route('/register',methods=['GET','POST'])
 def register():
     if request.method=='GET':
@@ -20,32 +31,48 @@ def register():
         user=request.form['user']
         pw=request.form['pass']
         color=request.form['color']
+        if db.registerUser(user,name,color,pw):
+            return redirect('/login')
+        else:
+            return redirect('/about') ##should be replaced with flash
 
 @app.route('/logout')
 def logout():
-    #if logged in, log out
-    #redirect to login
-    redirect('/login')
+    session.pop('user',None)
+    return redirect('/login')
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    if 'user' not in session:
+        return render_template('about.html')
+    else:
+        return render_template('about.html',user=session['user'],name=db.getName(session['user']))
 
 @app.route('/home')
 def home():
-    ##check if logged in
-    return render_template('home.html')
-    ##else, redirect to login and store home with sessions
-    
-@app.route('/setting',methods=['GET','POST'])
-def settings():
-    ##check if logged in
-    if request.method=='GET':
-        return render_template('settings.html')
+    if 'user' not in session:
+        session['return_to']='/home'
+        return redirect('/login')
     else:
-        ##get new info and update
-        pass
-    ##if not logged in, redirect to login and store settings with sessions
+        return render_template('home.html',name=db.getName(session['user']))
+        
+@app.route('/settings',methods=['GET','POST'])
+def settings():
+    if 'user' not in session:
+        session['return_to']='/settings'
+        return redirect('/login')
+    else:
+        if request.method=='GET':
+            return render_template('settings.html',name=db.getName(session['user']))
+        else: 
+            ##get new info and update
+            user = session['user']
+            name=request.form['name']
+            pw = request.form['oldpw']
+            newpw = request.form['newpw']
+            color = request.form['color']
+            db.updateUserInfo(user,pw,newpw,name,color)
+            return redirect('/home')
 
 if __name__ == '__main__':
     app.debug=True

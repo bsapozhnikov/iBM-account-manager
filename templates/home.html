@@ -1,11 +1,15 @@
 <html>
   <head>
     <title>Welcome to iBM</title>
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" />
   </head>
   <body>
-    <p>
-      {{name_or_login}}
-    </p>
+    <ul id="menu">
+      <div id="name">{{name}}</div>
+      <li><a href="/logout">Logout</a></li>
+      <li><a href="/settings">Change Settings</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
     <p>
       Hello and welcome to iB(rian)M(ichael)!
     </p>
