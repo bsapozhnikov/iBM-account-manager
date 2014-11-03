@@ -28,6 +28,10 @@ def login():
             
 @app.route('/register',methods=['GET','POST'])
 def register():
+    if "user" in session:
+        
+        flash("Please logout first to register another account!")
+        return render_template('home.html',name=db.getName(session['user']))
     if request.method=='GET':
         return render_template('register.html')
     else:
@@ -39,7 +43,7 @@ def register():
         if name == "" or user == "" or pw =="" or color == "":
             flash('Please fill in all the fields')
             return redirect('/register')
-        elif existingName(user)== False:
+        elif db.existingName(user)== False:
             flash('Your username is already taken!')
             return redirect('/register')
         else:
@@ -88,5 +92,6 @@ def settings():
             return redirect('/home')
 
 if __name__ == '__main__':
+    
     app.debug=True
     app.run()
