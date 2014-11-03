@@ -8,7 +8,13 @@ print db.collection_names()
 
 def getName(user):
     return db.users.find_one({'user':user})['name']
-
+def existingName(user):
+    
+    x = db.users.find_one({'user':user})
+    if x == None:
+        return True
+    else:
+        return False
 def validateUser(user,pw):
     print [doc['user'] for doc in db.users.find()]
     print [doc['name'] for doc in db.users.find()]

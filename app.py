@@ -8,7 +8,7 @@ app.secret_key ='insert_clever_secret_here'
 def login():
     if "user" in session:
         
-        
+        flash("Please logout first to log into another account!")
         return render_template('home.html',name=db.getName(session['user']))
     if request.method=='GET':
         return render_template('login.html')
@@ -31,14 +31,23 @@ def register():
     if request.method=='GET':
         return render_template('register.html')
     else:
+        
         name=request.form['name']
         user=request.form['user']
         pw=request.form['pass']
         color=request.form['color']
-        if db.registerUser(user,name,color,pw):
-            return redirect('/login')
+        if name == "" or user == "" or pw =="" or color == "":
+            flash('Please fill in all the fields')
+            return redirect('/register')
+        elif existingName(user)== False:
+            flash('Your username is already taken!')
+            return redirect('/register')
         else:
-            return redirect('/about') ##should be replaced with flash
+            
+            if db.registerUser(user,name,color,pw):
+                return redirect('/login')
+            else:
+                return redirect('/about') ##should be replaced with flash
 
 @app.route('/logout')
 def logout():
