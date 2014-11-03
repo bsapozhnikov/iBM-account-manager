@@ -81,15 +81,19 @@ def settings():
     else:
         if request.method=='GET':
             return render_template('settings.html',name=db.getName(session['user']))
-        else: 
+        else:
+            
             ##get new info and update
             user = session['user']
             name=request.form['name']
             pw = request.form['oldpw']
             newpw = request.form['newpw']
             color = request.form['color']
-            db.updateUserInfo(user,pw,newpw,name,color)
-            return redirect('/home')
+            if pw == "" or not db.updateUserInfo(user,pw,newpw,name,color):
+                flash("Please enter your correct current password to make any changes!")
+                return redirect("/settings")
+            else:
+                return redirect('/home')
 
 if __name__ == '__main__':
     
