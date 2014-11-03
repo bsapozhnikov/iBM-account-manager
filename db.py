@@ -3,7 +3,7 @@ from pymongo import Connection
 conn = Connection()
 
 db = conn['iBM-Brian-Michael']
-db.drop_collection("users")
+
 print db.collection_names()
 
 def getName(user):
