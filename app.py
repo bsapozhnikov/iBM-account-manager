@@ -6,6 +6,10 @@ app.secret_key ='insert_clever_secret_here'
 
 @app.route('/login',methods=['GET','POST'])
 def login():
+    if "user" in session:
+        
+        
+        return render_template('home.html',name=db.getName(session['user']))
     if request.method=='GET':
         return render_template('login.html')
     else:
