@@ -9,13 +9,13 @@
       <li><a href="/logout">Logout</a></li>
       <li><a href="/home">Home</a></li>
     </ul>
-    <form method="post">
-      Current Password<b>(Must be entered to make changes)</b>: <input type="password" name="oldpw"><br><br>
-      Name: <input type="text" name="name"><br>
-     
-      New Password: <input type="password" name="newpw"><br>
-      Favorite Color: <input type="text" name="color"><br>
-      <input type="submit" name="submit" value="Submit">
+    <form method="post" class="box">
+      <b>*Required*</b><br><input type="password" name="oldpw" placeholder="Current Password"><br><hr><br>
+      <input type="text" name="name" placeholder="New Name"><br>
+      <input type="password" name="newpw" placeholder="New Password"><br>
+      <input type="text" name="color" placeholder="New Favorite Color"><br>
+      <input type="submit" name="submit" value="Update" class="button">
     </form>
+    {% include 'messages.html' %}
   </body>
 </html>

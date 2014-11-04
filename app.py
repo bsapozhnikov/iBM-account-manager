@@ -4,6 +4,10 @@ import db
 app=Flask(__name__)
 app.secret_key ='insert_clever_secret_here'
 
+@app.route('/')
+def root():
+    return redirect('home')
+
 @app.route('/login',methods=['GET','POST'])
 def login():
     if "user" in session:
